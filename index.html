@@ -24,13 +24,17 @@
       headX = 340;
       headY = 340;
 
+      //posição inicial x e y da comida
+      comidaX=Math.floor(Math.random()*35);
+      comidaY=Math.floor(Math.random()*35);
+
       //direção atual do personagem, em 0 para o jogo só começar ao apertar uma tecla
       up = 0;
       down = 0;
       left = 0;
       right = 0;
 
-      bodySegmentSize = 20;
+      tileSize = 20;
 
       function game() {
         // Colore o fundo com a cor preta
@@ -39,7 +43,11 @@
         
         // Printa a cabeça
         ctx.fillStyle="green";
-	      ctx.fillRect(headX, headY, bodySegmentSize, bodySegmentSize);
+	      ctx.fillRect(headX, headY, tileSize, tileSize);
+
+        // Printa a comida
+        ctx.fillStyle="red";
+	      ctx.fillRect(comidaX, comidaY, tileSize, tileSize);
 
         // Move a cabeça constantemente
         if(up){
@@ -55,7 +63,7 @@
           headX++;
         }
 
-
+        
         
 
       }
