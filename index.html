@@ -6,32 +6,85 @@
     </title>
   </head>
   <body>
-    <canvas id="gc" width="400" height="400"></canvas>
+    <canvas id="gc" width="700" height="700"></canvas>
+    <p id="score">SCORE: 0</p>
     <script>
       window.onload=function(){
+        score = document.getElementById("score");
         canv=document.getElementById("gc");
         ctx=canv.getContext("2d");
+        // Adiciona listener para saber quando apertamos uma tecla
         document.addEventListener("keydown", keyPush);
-        setInterval(game,1000/15);
+
+        // Configura a periodicidade em que a função 'game' será chamada
+        setInterval(game,1000/400);
       }
 
+      //posição inicial x e y da cabeça
+      headX = 340;
+      headY = 340;
+
+      //direção atual do personagem, em 0 para o jogo só começar ao apertar uma tecla
+      up = 0;
+      down = 0;
+      left = 0;
+      right = 0;
+
+      bodySegmentSize = 20;
+
       function game() {
-       
+        // Colore o fundo com a cor preta
+        ctx.fillStyle="black";
+	      ctx.fillRect(0,0, canv.width, canv.height);
+        
+        // Printa a cabeça
+        ctx.fillStyle="green";
+	      ctx.fillRect(headX, headY, bodySegmentSize, bodySegmentSize);
+
+        // Move a cabeça constantemente
+        if(up){
+          headY--;
+        }
+        if(down){
+          headY++;
+        }
+        if(left){
+          headX--;
+        }
+        if(right){
+          headX++;
+        }
+
+
+        
+
       }
       function keyPush(evt) {
         switch(evt.keyCode) {
           case 37:
-
-          break;
+            left = 1;
+            right = 0;
+            up = 0;
+            down = 0;
+            break;
           case 38:
- 
-          break;
+            left = 0;
+            right = 0;
+            up = 1;
+            down = 0;
+            break;
           case 39:
-   
-          break;
+            left = 0;
+            right = 1;
+            up = 0;
+            down = 0;
+            break;
           case 40:
-    
-          break;
+            left = 0;
+            right = 0;
+            up = 0;
+            down = 1;
+            break;
         }
       }
     </script>
