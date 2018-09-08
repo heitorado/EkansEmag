@@ -17,16 +17,19 @@
         document.addEventListener("keydown", keyPush);
 
         // Configura a periodicidade em que a função 'game' será chamada
-        setInterval(game,1000/400);
+        setInterval(game,1000/15);
       }
+
+      // Tamanho padrao dos quadrados
+      tileSize = 20;
 
       //posição inicial x e y da cabeça
       headX = 340;
       headY = 340;
 
       //posição inicial x e y da comida
-      comidaX=Math.floor(Math.random()*35);
-      comidaY=Math.floor(Math.random()*35);
+      comidaX=Math.floor(Math.random()*35) - tileSize/2;
+      comidaY=Math.floor(Math.random()*35) - tileSize/2;
 
       //direção atual do personagem, em 0 para o jogo só começar ao apertar uma tecla
       up = 0;
@@ -34,7 +37,7 @@
       left = 0;
       right = 0;
 
-      tileSize = 20;
+      
 
       function game() {
         // Colore o fundo com a cor preta
@@ -51,16 +54,16 @@
 
         // Move a cabeça constantemente
         if(up){
-          headY--;
+          headY-= tileSize;
         }
         if(down){
-          headY++;
+          headY+= tileSize;
         }
         if(left){
-          headX--;
+          headX-= tileSize;
         }
         if(right){
-          headX++;
+          headX+= tileSize;
         }
 
         
