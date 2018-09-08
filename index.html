@@ -10,7 +10,7 @@
     <p id="score">SCORE: 0</p>
     <script>
       window.onload=function(){
-        score = document.getElementById("score");
+        scoreDisplay = document.getElementById("score");
         canv=document.getElementById("gc");
         ctx=canv.getContext("2d");
         // Adiciona listener para saber quando apertamos uma tecla
@@ -23,13 +23,16 @@
       // Tamanho padrao dos quadrados
       tileSize = 20;
 
+      //variavel para guardar a pontuação
+      score = 0;
+
       //posição inicial x e y da cabeça
       headX = 340;
       headY = 340;
 
       //posição inicial x e y da comida
-      comidaX=Math.floor(Math.random()*35) - tileSize/2;
-      comidaY=Math.floor(Math.random()*35) - tileSize/2;
+      comidaX = Math.floor(Math.random()*35)*tileSize;
+      comidaY = Math.floor(Math.random()*35)*tileSize;
 
       //direção atual do personagem, em 0 para o jogo só começar ao apertar uma tecla
       up = 0;
@@ -52,7 +55,7 @@
         ctx.fillStyle="red";
 	      ctx.fillRect(comidaX, comidaY, tileSize, tileSize);
 
-        // Move a cabeça constantemente
+        // Move a cabeça constantemente de acordo com a direção
         if(up){
           headY-= tileSize;
         }
@@ -65,8 +68,20 @@
         if(right){
           headX+= tileSize;
         }
-
         
+
+        // verifica se comeu a comida 
+        if(headX == comidaX && headY == comidaY)
+        {
+          // Incrementa score atualiza o HTML do Score
+          score += 5;
+          scoreDisplay.innerHTML = "SCORE: " + score;
+
+          // Muda a comida de lugar
+          comidaX = Math.floor(Math.random()*35)*tileSize;
+          comidaY = Math.floor(Math.random()*35)*tileSize;
+
+        }
         
 
       }
