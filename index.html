@@ -43,17 +43,6 @@
       
 
       function game() {
-        // Colore o fundo com a cor preta
-        ctx.fillStyle="black";
-	      ctx.fillRect(0,0, canv.width, canv.height);
-        
-        // Printa a cabeça
-        ctx.fillStyle="green";
-	      ctx.fillRect(headX, headY, tileSize, tileSize);
-
-        // Printa a comida
-        ctx.fillStyle="red";
-	      ctx.fillRect(comidaX, comidaY, tileSize, tileSize);
 
         // Move a cabeça constantemente de acordo com a direção
         if(up){
@@ -69,6 +58,24 @@
           headX+= tileSize;
         }
         
+        // Verifica se a cabeça saiu da borda e "teleporta" para a borda oposta
+        if(headX >= canv.width)
+        {
+          headX = 0;
+        }
+        else if(headX < 0)
+        {
+          headX = canv.width-tileSize;
+        }
+        
+        if(headY >= canv.height)
+        {
+          headY = 0;
+        }
+        else if(headY < 0)
+        {
+          headY = canv.height-tileSize;
+        }
 
         // verifica se comeu a comida 
         if(headX == comidaX && headY == comidaY)
@@ -82,7 +89,18 @@
           comidaY = Math.floor(Math.random()*35)*tileSize;
 
         }
+
+        // Colore o fundo com a cor preta
+        ctx.fillStyle="black";
+	      ctx.fillRect(0,0, canv.width, canv.height);
         
+        // Printa a cabeça
+        ctx.fillStyle="green";
+	      ctx.fillRect(headX, headY, tileSize, tileSize);
+
+        // Printa a comida
+        ctx.fillStyle="red";
+	      ctx.fillRect(comidaX, comidaY, tileSize, tileSize);
 
       }
       function keyPush(evt) {
