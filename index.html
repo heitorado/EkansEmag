@@ -95,7 +95,6 @@
         {
           // Incrementa score atualiza o HTML do Score
           score += 5;
-          scoreDisplay.innerHTML = "SCORE: " + score;
 
           // Muda a comida de lugar
           comidaX = Math.floor(Math.random()*35)*tileSize;
@@ -103,23 +102,29 @@
 
           //Aumenta o corpo
           tamanhoCorpo++; 
-          
-
         }
 
         // Colore o fundo com a cor preta
         ctx.fillStyle="black";
         ctx.fillRect(0,0, canv.width, canv.height);
         
-        // Printa o corpo até o tamanho da cauda
+        // Printa o corpo até o tamanho da cauda e checa se "mordeu" a si mesma
         ctx.fillStyle="green";
         for(i=0; i<tamanhoCorpo; i++){
-	        ctx.fillRect(corpo[i].x, corpo[i].y, tileSize, tileSize);
+          ctx.fillRect(corpo[i].x, corpo[i].y, tileSize, tileSize);
+          
+          if( i > 0 && corpo[0].x == corpo[i].x && corpo[0].y == corpo[i].y){
+            score = 0;
+            tamanhoCorpo = 1;
+          }
         }
 
         // Printa a comida
         ctx.fillStyle="red";
         ctx.fillRect(comidaX, comidaY, tileSize, tileSize);
+
+        // Atualiza a pontuação
+        scoreDisplay.innerHTML = "SCORE: " + score;
       }
       function keyPush(evt) {
         switch(evt.keyCode) {
