@@ -26,9 +26,14 @@
       //variavel para guardar a pontuação
       score = 0;
 
-      //posição inicial x e y da cabeça
       headX = 340;
       headY = 340;
+
+      // tamanho do corpo e vetor do corpo
+      tamanhoCorpo = 1;
+      corpo = [];
+      //posição inicial x e y da cabeça
+      corpo.push({"x": 340, "y": 340});  
 
       //posição inicial x e y da comida
       comidaX = Math.floor(Math.random()*35)*tileSize;
@@ -40,45 +45,53 @@
       left = 0;
       right = 0;
 
-      
+      var i;
 
       function game() {
 
+        //adiciona ultima posição da cabeça a cauda
+        corpo.unshift({"x": corpo[0].x, "y": corpo[0].y}); 
+        // limpa historico desnecessario da trilha do corpo      
+        while(corpo.length > tamanhoCorpo)
+          corpo.pop();
+
         // Move a cabeça constantemente de acordo com a direção
         if(up){
-          headY-= tileSize;
+          corpo[0].y -= tileSize;
         }
         if(down){
-          headY+= tileSize;
+          corpo[0].y += tileSize;
         }
         if(left){
-          headX-= tileSize;
+          corpo[0].x -= tileSize;
         }
         if(right){
-          headX+= tileSize;
+          corpo[0].x += tileSize;
         }
+        
+        
         
         // Verifica se a cabeça saiu da borda e "teleporta" para a borda oposta
-        if(headX >= canv.width)
+        if(corpo[0].x >= canv.width)
         {
-          headX = 0;
+          corpo[0].x = 0;
         }
-        else if(headX < 0)
+        else if(corpo[0].x < 0)
         {
-          headX = canv.width-tileSize;
+          corpo[0].x = canv.width-tileSize;
         }
         
-        if(headY >= canv.height)
+        if(corpo[0].y >= canv.height)
         {
-          headY = 0;
+          corpo[0].y = 0;
         }
-        else if(headY < 0)
+        else if(corpo[0].y < 0)
         {
-          headY = canv.height-tileSize;
+          corpo[0].y = canv.height-tileSize;
         }
 
         // verifica se comeu a comida 
-        if(headX == comidaX && headY == comidaY)
+        if(corpo[0].x == comidaX && corpo[0].y == comidaY)
         {
           // Incrementa score atualiza o HTML do Score
           score += 5;
@@ -88,20 +101,25 @@
           comidaX = Math.floor(Math.random()*35)*tileSize;
           comidaY = Math.floor(Math.random()*35)*tileSize;
 
+          //Aumenta o corpo
+          tamanhoCorpo++; 
+          
+
         }
 
         // Colore o fundo com a cor preta
         ctx.fillStyle="black";
-	      ctx.fillRect(0,0, canv.width, canv.height);
+        ctx.fillRect(0,0, canv.width, canv.height);
         
-        // Printa a cabeça
+        // Printa o corpo até o tamanho da cauda
         ctx.fillStyle="green";
-	      ctx.fillRect(headX, headY, tileSize, tileSize);
+        for(i=0; i<tamanhoCorpo; i++){
+	        ctx.fillRect(corpo[i].x, corpo[i].y, tileSize, tileSize);
+        }
 
         // Printa a comida
         ctx.fillStyle="red";
-	      ctx.fillRect(comidaX, comidaY, tileSize, tileSize);
-
+        ctx.fillRect(comidaX, comidaY, tileSize, tileSize);
       }
       function keyPush(evt) {
         switch(evt.keyCode) {
