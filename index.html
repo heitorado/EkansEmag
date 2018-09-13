@@ -23,34 +23,14 @@
         // Adiciona listener para saber quando apertamos uma tecla
         document.addEventListener("keydown", keyPush);
 
+        // Inicializa configs do jogo
+        initalize();
+
         // Configura a periodicidade em que a função 'game' será chamada
         setInterval(game,1000/15);
       }
 
-      // Tamanho padrao dos quadrados
-      tileSize = 20;
-
-      //variavel para guardar a pontuação
-      score = 0;
-
-      headX = 340;
-      headY = 340;
-
-      // tamanho do corpo e vetor do corpo
-      tamanhoCorpo = 1;
-      corpo = [];
-      //posição inicial x e y da cabeça
-      corpo.push({"x": 340, "y": 340});  
-
-      //posição inicial x e y da comida
-      comidaX = Math.floor(Math.random()*35)*tileSize;
-      comidaY = Math.floor(Math.random()*35)*tileSize;
-
-      //direção atual do personagem, em 0 para o jogo só começar ao apertar uma tecla
-      up = 0;
-      down = 0;
-      left = 0;
-      right = 0;
+      // load game sound files with Howler.js
 
       var eating_sound = new Howl({
         src: ['eat.wav'],
@@ -69,96 +49,171 @@
         volume: 0.1
       });
 
+      // end of sound files
+      
+      function initalize(){
+        // para controlar reinicialização do jogo
+        dead = true;
 
-      var i;
+        // Tamanho padrao dos quadrados
+        tileSize = 20;
+
+        //variavel para guardar a pontuação
+        score = 0;
+
+        headX = 340;
+        headY = 340;
+
+        // tamanho do corpo e vetor do corpo
+        tamanhoCorpo = 1;
+        corpo = [];
+        //posição inicial x e y da cabeça
+        corpo.push({"x": 340, "y": 340});  
+
+        //posição inicial x e y da comida
+        comidaX = Math.floor(Math.random()*35)*tileSize;
+        comidaY = Math.floor(Math.random()*35)*tileSize;
+
+        //direção atual do personagem, em 0 para o jogo só começar ao apertar uma tecla
+        up = 0;
+        down = 0;
+        left = 0;
+        right = 0;
+
+        // Mensagens de game over:
+        passive_aggressive_messages = ["You Died. Boo.",
+                                       "C'mon, its easy.",
+                                       "Damn, ur terrible.",
+                                       "*sigh*",
+                                       "GET REKT",
+                                       "Congrats!! Not really.",
+                                       "You're getting worse.",
+                                       "Stop trying already!",
+                                       "Is that all you've got?",
+                                       "Did you mean to do that?",
+                                       "How could you fail at this?",
+                                       "Shouldn't be so hard.",
+                                       "You don't play a lot, do you?",
+                                       "You failed. At SNAKE. Wow.",
+                                       "Not good.",
+                                       "Try doing the OPPOSITE." ];
+
+        num_msg = Math.floor(Math.random()*15); //seleciona uma para a partida atual
+
+        i = 0;
+      }
+      
 
       function game() {
 
-        //adiciona ultima posição da cabeça a cauda
-        corpo.unshift({"x": corpo[0].x, "y": corpo[0].y}); 
-        // limpa historico desnecessario da trilha do corpo      
-        while(corpo.length > tamanhoCorpo)
-          corpo.pop();
+        if(!dead){
+          //adiciona ultima posição da cabeça a cauda
+          corpo.unshift({"x": corpo[0].x, "y": corpo[0].y}); 
+          // limpa historico desnecessario da trilha do corpo      
+          while(corpo.length > tamanhoCorpo)
+            corpo.pop();
 
-        // Move a cabeça constantemente de acordo com a direção
-        if(up){
-          corpo[0].y -= tileSize;
-        }
-        if(down){
-          corpo[0].y += tileSize;
-        }
-        if(left){
-          corpo[0].x -= tileSize;
-        }
-        if(right){
-          corpo[0].x += tileSize;
-        }
-        
-        
-        
-        // Verifica se a cabeça saiu da borda e "teleporta" para a borda oposta
-        if(corpo[0].x >= canv.width)
-        {
-          corpo[0].x = 0;
-        }
-        else if(corpo[0].x < 0)
-        {
-          corpo[0].x = canv.width-tileSize;
-        }
-        
-        if(corpo[0].y >= canv.height)
-        {
-          corpo[0].y = 0;
-        }
-        else if(corpo[0].y < 0)
-        {
-          corpo[0].y = canv.height-tileSize;
-        }
-
-        // verifica se comeu a comida 
-        if(corpo[0].x == comidaX && corpo[0].y == comidaY)
-        {
-          // Incrementa score atualiza o HTML do Score
-          score += 5;
-
-          // Muda a comida de lugar
-          comidaX = Math.floor(Math.random()*35)*tileSize;
-          comidaY = Math.floor(Math.random()*35)*tileSize;
-
-          //Aumenta o corpo
-          tamanhoCorpo++; 
-
-          // toca som de comendo
-          eating_sound.play();
-        }
-
-        // Colore o fundo com a cor preta
-        ctx.fillStyle="black";
-        ctx.fillRect(0,0, canv.width, canv.height);
-        
-        // Printa o corpo até o tamanho da cauda e checa se "mordeu" a si mesma
-        ctx.fillStyle="green";
-        for(i=0; i<tamanhoCorpo; i++){
-          ctx.fillRect(corpo[i].x, corpo[i].y, tileSize, tileSize);
-          
-          if( i > 0 && corpo[0].x == corpo[i].x && corpo[0].y == corpo[i].y){
-            score = 0;
-            tamanhoCorpo = 1;
-
-            // Printa som de falha
-            fail_sound.play();
+          // Move a cabeça constantemente de acordo com a direção
+          if(up){
+            corpo[0].y -= tileSize;
           }
+          if(down){
+            corpo[0].y += tileSize;
+          }
+          if(left){
+            corpo[0].x -= tileSize;
+          }
+          if(right){
+            corpo[0].x += tileSize;
+          }
+          
+          
+          
+          // Verifica se a cabeça saiu da borda e "teleporta" para a borda oposta
+          if(corpo[0].x >= canv.width)
+          {
+            corpo[0].x = 0;
+          }
+          else if(corpo[0].x < 0)
+          {
+            corpo[0].x = canv.width-tileSize;
+          }
+          
+          if(corpo[0].y >= canv.height)
+          {
+            corpo[0].y = 0;
+          }
+          else if(corpo[0].y < 0)
+          {
+            corpo[0].y = canv.height-tileSize;
+          }
+
+          // verifica se comeu a comida 
+          if(corpo[0].x == comidaX && corpo[0].y == comidaY)
+          {
+            // Incrementa score atualiza o HTML do Score
+            score += 5;
+
+            // Muda a comida de lugar
+            comidaX = Math.floor(Math.random()*35)*tileSize;
+            comidaY = Math.floor(Math.random()*35)*tileSize;
+
+            //Aumenta o corpo
+            tamanhoCorpo++; 
+
+            // toca som de comendo
+            eating_sound.play();
+          }
+
+          // Colore o fundo com a cor preta
+          ctx.fillStyle="black";
+          ctx.fillRect(0,0, canv.width, canv.height);
+          
+          // Printa o corpo até o tamanho da cauda e checa se "mordeu" a si mesma
+          ctx.fillStyle="green";
+          for(i=0; i<tamanhoCorpo; i++){
+            ctx.fillRect(corpo[i].x, corpo[i].y, tileSize, tileSize);
+            
+            if( i > 0 && corpo[0].x == corpo[i].x && corpo[0].y == corpo[i].y){
+              score = 0;
+              tamanhoCorpo = 1;
+
+              // Printa som de falha
+              fail_sound.play();
+
+              dead = true;
+            }
+          }
+
+          // Printa a comida
+          ctx.fillStyle="red";
+          ctx.fillRect(comidaX, comidaY, tileSize, tileSize);
+
+          // Atualiza a pontuação
+          scoreDisplay.innerHTML = "SCORE: " + score;
         }
 
-        // Printa a comida
-        ctx.fillStyle="red";
-        ctx.fillRect(comidaX, comidaY, tileSize, tileSize);
+        if(dead){
+          // deixa somente a tela preta
+          ctx.fillStyle="black";
+          ctx.fillRect(0,0, canv.width, canv.height);
+          
+          // imprime mensagem
+          ctx.fillStyle = "red";
+          ctx.textAlign = "center";
+          ctx.font="50px Montserrat";
+          ctx.fillText(passive_aggressive_messages[num_msg], canv.width/2, canv.height/2 - 200);
 
-        // Atualiza a pontuação
-        scoreDisplay.innerHTML = "SCORE: " + score;
+          ctx.font="64px Montserrat";
+          ctx.fillText("Press SPACE to ", canv.width/2, canv.height/2);
+          ctx.fillText("try again...", canv.width/2, canv.height/2 + 75);
+
+        }
       }
+
       function keyPush(evt) {
         switch(evt.keyCode) {
+          // left arrow
           case 37:
             // só permite ir para a esquerda se nao estava indo para a direita antes
             if(!right){
@@ -168,6 +223,7 @@
               down = 0;
             }
             break;
+          // up arrow            
           case 38:
             // só permite ir para cima se nao estava indo para baixo antes
             if(!down){
@@ -177,6 +233,7 @@
               down = 0;
             }
             break;
+          // right arrow          
           case 39:
             // só permite ir para a direita se nao estava indo para a esquerda antes
             if(!left){
@@ -186,6 +243,7 @@
               down = 0;
             }
             break;
+          // down arrow
           case 40:
             // só permite ir para baixo se nao estava indo para cima antes
             if(!up){
@@ -193,6 +251,21 @@
               right = 0;
               up = 0;
               down = 1;
+            }
+            break;
+          
+          // spacebar
+          case 32: 
+            if(dead){
+              dead = false;
+              left = 0;
+              right = 0;
+              up = 0;
+              down = 0;
+
+              num_msg = Math.floor(Math.random()*15); //seleciona uma nova msg para a partida atual
+              
+              // initialize();
             }
             break;
         }
