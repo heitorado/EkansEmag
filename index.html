@@ -53,7 +53,7 @@
       
       function initalize(){
         // para controlar reinicialização do jogo
-        dead = true;
+        dead = false;
 
         // Tamanho padrao dos quadrados
         tileSize = 20;
@@ -170,7 +170,7 @@
           ctx.fillRect(0,0, canv.width, canv.height);
           
           // Printa o corpo até o tamanho da cauda e checa se "mordeu" a si mesma
-          ctx.fillStyle="green";
+          ctx.fillStyle="purple";
           for(i=0; i<tamanhoCorpo; i++){
             ctx.fillRect(corpo[i].x, corpo[i].y, tileSize, tileSize);
             
@@ -186,7 +186,7 @@
           }
 
           // Printa a comida
-          ctx.fillStyle="red";
+          ctx.fillStyle="yellow";
           ctx.fillRect(comidaX, comidaY, tileSize, tileSize);
 
           // Atualiza a pontuação
