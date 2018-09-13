@@ -5,14 +5,18 @@
       Ekans Emag
     </title>
     
-    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.15/howler.min.js"></script> 
+
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
+    <p id="copyright">Songs Loaded with Howler.js and made by Incompetech/Freesound.org</p>
     <canvas id="gc" width="700" height="700"></canvas>
     <p id="score">SCORE: 0</p>
     <script>
-      window.onload=function(){
+      window.onload=function(){       
+
         scoreDisplay = document.getElementById("score");
         canv=document.getElementById("gc");
         ctx=canv.getContext("2d");
@@ -47,6 +51,24 @@
       down = 0;
       left = 0;
       right = 0;
+
+      var eating_sound = new Howl({
+        src: ['eat.wav'],
+        volume: 0.2
+      });
+
+      var fail_sound = new Howl({
+        src: ['fail.wav'],
+        volume: 0.2
+      });
+
+      var bg_sound = new Howl({
+        src: ['bgmusic.mp3'],
+        autoplay: true,
+        loop: true,
+        volume: 0.1
+      });
+
 
       var i;
 
@@ -105,6 +127,9 @@
 
           //Aumenta o corpo
           tamanhoCorpo++; 
+
+          // toca som de comendo
+          eating_sound.play();
         }
 
         // Colore o fundo com a cor preta
@@ -119,6 +144,9 @@
           if( i > 0 && corpo[0].x == corpo[i].x && corpo[0].y == corpo[i].y){
             score = 0;
             tamanhoCorpo = 1;
+
+            // Printa som de falha
+            fail_sound.play();
           }
         }
 

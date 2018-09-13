@@ -5,3 +5,9 @@ body{
     text-align: center;
     color: white;
 }
+
+#copyright{
+    color: gray;
+    font-style: italic;
+    font-size: 12px;
+}
