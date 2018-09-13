@@ -160,28 +160,40 @@
       function keyPush(evt) {
         switch(evt.keyCode) {
           case 37:
-            left = 1;
-            right = 0;
-            up = 0;
-            down = 0;
+            // só permite ir para a esquerda se nao estava indo para a direita antes
+            if(!right){
+              left = 1;
+              right = 0;
+              up = 0;
+              down = 0;
+            }
             break;
           case 38:
-            left = 0;
-            right = 0;
-            up = 1;
-            down = 0;
+            // só permite ir para cima se nao estava indo para baixo antes
+            if(!down){
+              left = 0;
+              right = 0;
+              up = 1;
+              down = 0;
+            }
             break;
           case 39:
-            left = 0;
-            right = 1;
-            up = 0;
-            down = 0;
+            // só permite ir para a direita se nao estava indo para a esquerda antes
+            if(!left){
+              left = 0;
+              right = 1;
+              up = 0;
+              down = 0;
+            }
             break;
           case 40:
-            left = 0;
-            right = 0;
-            up = 0;
-            down = 1;
+            // só permite ir para baixo se nao estava indo para cima antes
+            if(!up){
+              left = 0;
+              right = 0;
+              up = 0;
+              down = 1;
+            }
             break;
         }
       }
